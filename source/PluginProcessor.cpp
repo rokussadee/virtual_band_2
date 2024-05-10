@@ -1,3 +1,6 @@
+#include <juce_audio_processors/juce_audio_processors.h> // For juce::AudioProcessor
+#include <juce_audio_basics/juce_audio_basics.h> // For juce::AudioBuffer
+#include <juce_dsp/juce_dsp.h> // For juce::ScopedNoDenormals
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
@@ -122,6 +125,8 @@ bool PluginProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
                                               juce::MidiBuffer& midiMessages)
 {
+    buffer.clear();
+    midiProcessor.processMidi(midiMessages);
     juce::ignoreUnused (midiMessages);
 
     juce::ScopedNoDenormals noDenormals;

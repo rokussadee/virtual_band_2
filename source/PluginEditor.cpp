@@ -1,10 +1,15 @@
+#include <juce_gui_basics/juce_gui_basics.h> // For GUI components
+#include <juce_core/juce_core.h> // For utility functions and macros
 #include "PluginEditor.h"
 
 PluginEditor::PluginEditor (PluginProcessor& p)
-    : AudioProcessorEditor (&p), processorRef (p)
+    : AudioProcessorEditor (&p),
+      processorRef (p),
+      keyboardComponent(keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard)
 {
     juce::ignoreUnused (processorRef);
 
+    addAndMakeVisible(keyboardComponent);
     addAndMakeVisible (inspectButton);
 
     // this chunk of code instantiates and opens the melatonin inspector
