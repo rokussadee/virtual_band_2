@@ -99,8 +99,24 @@ target_compile_features(SharedCode INTERFACE cxx_std_20)
 # If you are like me, you'll use globs for your sanity.
 # Just ensure you employ CONFIGURE_DEPENDS so the build system picks up changes
 # If you want to appease the CMake gods and avoid globs, manually add files like so:
- # set(SourceFiles Source/PluginEditor.h Source/PluginProcessor.h Source/MidiProcessor.h Source/MidiListModel.h Source/MidiTable.h Source/MidiQueue.h Source/PluginEditor.cpp Source/PluginProcessor.cpp Source/MidiProcessor.cpp Source/MidiListModel.cpp Source/MidiTable.cpp Source/MidiQueue.cpp)
-file(GLOB_RECURSE SourceFiles CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/source/*.h")
+set(SourceFiles
+        source/PluginEditor.h
+        source/PluginProcessor.h
+        source/MidiProcessor.h
+        source/MidiListModel.h
+        source/MidiTable.h
+        source/MidiQueue.h
+        source/LookAndFeel.h
+
+        source/PluginEditor.cpp
+        source/PluginProcessor.cpp
+        source/MidiProcessor.cpp
+        source/MidiListModel.cpp
+        source/MidiTable.cpp
+        source/MidiQueue.cpp
+        source/LookAndFeel.cpp
+)
+# file(GLOB_RECURSE SourceFiles CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/source/*.h")
 target_sources(SharedCode INTERFACE ${SourceFiles})
 
 # Adds a BinaryData target for embedding assets into the binary

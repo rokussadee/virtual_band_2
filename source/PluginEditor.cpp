@@ -7,6 +7,10 @@ PluginEditor::PluginEditor (PluginProcessor& p)
       processorRef (p),
       keyboardComponent(keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard)
 {
+    juce::LookAndFeel::setDefaultLookAndFeel(&customLnf);
+
+    addAndMakeVisible(customDial);
+
     juce::ignoreUnused (processorRef);
 
     addAndMakeVisible(keyboardComponent);
@@ -30,6 +34,7 @@ PluginEditor::PluginEditor (PluginProcessor& p)
 
 PluginEditor::~PluginEditor()
 {
+    juce::LookAndFeel::setDefaultLookAndFeel(nullptr);
 }
 
 void PluginEditor::paint (juce::Graphics& g)
@@ -47,7 +52,9 @@ void PluginEditor::paint (juce::Graphics& g)
 void PluginEditor::resized()
 {
     // layout the positions of your child components here
+
     auto area = getLocalBounds();
     area.removeFromBottom(50);
     inspectButton.setBounds (getLocalBounds().withSizeKeepingCentre(100, 50));
+    customDial.setBounds(getWidth()/2 - 100, getHeight()/2 - 100, 200, 200);
 }

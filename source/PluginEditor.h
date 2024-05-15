@@ -1,10 +1,11 @@
 #pragma once
 
-#include <juce_gui_basics/juce_gui_basics.h> // For juce::AudioProcessorEditor, juce::Graphics, juce::TextButton
-#include <juce_audio_utils/juce_audio_utils.h> // For MidiKeyboardComponent
-#include "PluginProcessor.h"
 #include "BinaryData.h"
+#include "LookAndFeel.h"
+#include "PluginProcessor.h"
 #include "melatonin_inspector/melatonin_inspector.h"
+#include <juce_audio_utils/juce_audio_utils.h> // For MidiKeyboardComponent
+#include <juce_gui_basics/juce_gui_basics.h> // For juce::AudioProcessorEditor, juce::Graphics, juce::TextButton
 
 //==============================================================================
 class PluginEditor : public juce::AudioProcessorEditor
@@ -20,6 +21,8 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
+    juce::CustomLNF customLnf;
+    juce::CustomDial customDial;
     PluginProcessor& processorRef;
     juce::MidiKeyboardState keyboardState;
     juce::MidiKeyboardComponent keyboardComponent;
