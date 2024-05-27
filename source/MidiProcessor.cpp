@@ -15,6 +15,7 @@ void MidiProcessor::processMidi(juce::MidiBuffer& midiMessages) {
   juce::MidiMessageSequence sequence;
 
   for (const juce::MidiMessageMetadata metadata : midiMessages) {
+      // Check if the message is a SysEx message and skip it if it is
     DBG("Processing MIDI Metadata");
     DBG("Metadata: TimeStamp = " << metadata.samplePosition
                                     << ", Message = " << metadata.getMessage().getDescription());
@@ -29,10 +30,12 @@ void MidiProcessor::processMidi(juce::MidiBuffer& midiMessages) {
 
     DBG(description);
 
-    if (message.getRawData() != nullptr && message.getRawDataSize() > 0)
+    if (message.getRawData() != nullptr && message.getRawDataSize() > 0 && message.isNoteOnOrOff())
     {
         midiQueue.push (message);
         DBG ("message pushed to queue successfully");
+        sequence.addEvent(message, metadata.samplePosition);
+        DBG("message added to the sequence successfully");
     } else if (message.getRawDataSize() == 0) {
         DBG("MIDI message has zero size, not pushed to queue. Raw Data Pointer: "
              << juce::String::toHexString((juce::int64)(message.getRawData()))
@@ -43,10 +46,39 @@ void MidiProcessor::processMidi(juce::MidiBuffer& midiMessages) {
         << ", Size: " << message.getRawDataSize());
     }
 
-    sequence.addEvent(message, metadata.samplePosition);
+    DBG("MidiQueue contents: " << midiQueue.getQueueContents());
+
+    std::vector<juce::MidiMessage> messageVector = midiQueue.getMessages();
+    std::ostringstream vts;
+
+    if (!messageVector.empty()) {
+        msgV2S(messageVector);
+    } else {
+        DBG("messageVector is empty");
+    }
+
+    std::cout << "MidiQueue getMessages started: \n" << vts.str() << "\nMidiQueue getMessages ended\n" << std::endl; // For debugging purposes
   }
 
-  std::vector<juce::MidiMessage> messages;
-  midiQueue.pop(std::back_inserter(messages));
-  midiListModel.addMessages(sequence);
+  if(!sequence.getNumEvents() == 0)
+  {
+      std::vector<juce::MidiMessage> messages;
+      midiQueue.pop (std::back_inserter (messages));
+      midiListModel.addMessages (sequence);
+      DBG("MidiMessageSequence: " << toString(sequence));
+  }
+}
+
+void MidiProcessor::msgV2S(std::vector<juce::MidiMessage> messageVector)
+{
+    std::ostringstream stream = helpers.msgV2S(messageVector);
+
+    std::cout << "Midi Messages in MidiProcessor: " << stream.str() << std::endl;
+}
+
+juce::String MidiProcessor::toString (const juce::MidiMessageSequence& sequence)
+{
+    juce::String string = helpers.toString(sequence);
+
+    return string;
 }

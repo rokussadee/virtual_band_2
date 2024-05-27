@@ -9,6 +9,7 @@
 
 #include <juce_audio_basics/juce_audio_basics.h> // For juce::MidiMessage and juce::MidiMessageSequence
 #include <vector>
+#include "helpers/helpers.h"
 
 class MidiListModel {
 public:
@@ -24,9 +25,13 @@ public:
 
   std::function<void()> onChange;
 
+  void msgV2S(std::vector<juce::MidiMessage> messageVector);
+
+
 private:
   static constexpr auto numToStore = 1000;
   std::vector<juce::MidiMessage> messages;
+  Helpers::helpers helpers;
 };
 
 #endif  // VIRTUAL_BAND_MIDILISTMODEL_H

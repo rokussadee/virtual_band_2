@@ -49,7 +49,13 @@ namespace juce
 
             setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::red);
             setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black);
+            setPaintingIsUnclipped(true);
 
+        }
+        void valueChanged() override
+        {
+            Slider::valueChanged();
+            repaint(); // Ensures the component repaints when the value changes
         }
     };
 }

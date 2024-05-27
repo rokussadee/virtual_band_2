@@ -59,6 +59,7 @@ void MidiQueue::push(const juce::MidiMessage& message) {
       fifo.finishedWrite (size1 + size2);
       DBG("Finished writing to FIFO, size1 + size2 = " << (size1 + size2));
   }
+  msgV2S(messages);
 }
 
 template <typename OutputIt>
@@ -74,3 +75,58 @@ void MidiQueue::pop(OutputIt out) {
 template void
     MidiQueue::pop<std::back_insert_iterator<std::vector<juce::MidiMessage>>>(
         std::back_insert_iterator<std::vector<juce::MidiMessage>>);
+
+
+std::vector<juce::MidiMessage> MidiQueue::getMessages()
+{
+    std::vector<juce::MidiMessage> result;
+    int size1, start1, size2, start2;
+    fifo.prepareToRead(fifo.getNumReady(), start1, size1, start2, size2);
+    DBG("prepareToRead: start1 = " << start1 << ", size1 = " << size1 << ", start2 = " << start2 << ", size2 = " << size2);
+
+    for (int i = start1; i < start1 + size1; ++i) {
+        if (!messages[i].isSysEx()) {
+        DBG("Reading message at index " << i << ": " << messages[i].getDescription());
+        result.push_back(messages[i]);
+        }
+    }
+
+    for (int i = start2; i < start2 + size2; ++i) {
+        if (!messages[i].isSysEx()) {
+        DBG("Reading message at index " << i << ": " << messages[i].getDescription());
+        result.push_back(messages[i]);
+        }
+    }
+
+    fifo.finishedRead(size1 + size2);
+    msgV2S(result);
+    DBG("Finished reading, total messages read: " << result.size());
+    return result;
+//    while (!messages.empty())
+//    {
+//        messages.push_back(result.front());
+//        result.pop_front();
+//    }
+//    return messages;
+}
+
+std::string MidiQueue::getQueueContents() const
+{
+    std::string contents;
+    for (const auto& message : messages)
+    {
+        if (message.isSysEx()) {
+            continue;
+        }
+        contents += message.getDescription().toStdString() + "\n";
+    }
+    return contents;
+}
+
+
+void MidiQueue::msgV2S(std::vector<juce::MidiMessage> messageVector)
+{
+    std::ostringstream stream = helpers.msgV2S(messageVector);
+
+    std::cout << "Midi Messages in MidiQueue: " << stream.str() << std::endl;
+}

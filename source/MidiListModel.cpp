@@ -15,12 +15,15 @@ void MidiListModel::addMessages(const juce::MidiMessageSequence& sequence) {
   const auto numToRemove =
       juce::jmax(0, (int)messages.size() + numToAdd - numToStore);
 
+  DBG("MidiListModel;\n\tnumNewMessages: " << numNewMessages << "\n\tnumToAdd: " << numToAdd << "\n\tnumToRemove: " << numToRemove);
   messages.erase(messages.begin(), std::next(messages.begin(), numToRemove));
   for (int i = 0; i < numToAdd; ++i)
     messages.push_back(sequence.getEventPointer(i)->message);
 
   if (onChange)
     onChange();
+
+  msgV2S(messages);
 }
 
 void MidiListModel::clear() {
@@ -35,4 +38,12 @@ size_t MidiListModel::size() const {
 
 const juce::MidiMessage& MidiListModel::operator[](size_t ind) const {
   return messages[ind];
+}
+
+
+void MidiListModel::msgV2S(std::vector<juce::MidiMessage> messageVector)
+{
+    std::ostringstream stream = helpers.msgV2S(messageVector);
+
+    std::cout << "Midi Messages in MidiListModel: " << stream.str() << std::endl;
 }

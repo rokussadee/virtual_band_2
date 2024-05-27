@@ -56,5 +56,5 @@ void PluginEditor::resized()
     auto area = getLocalBounds();
     area.removeFromBottom(50);
     inspectButton.setBounds (getLocalBounds().withSizeKeepingCentre(100, 50));
-    customDial.setBounds(getWidth()/2 - 100, getHeight()/2 - 100, 200, 200);
+    customDial.setBounds(getWidth()/2 - 100, getHeight()/2 - 100, 120, 70);
 }

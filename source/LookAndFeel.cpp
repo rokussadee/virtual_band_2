@@ -15,7 +15,7 @@ namespace juce
 
         auto radius = jmin (bounds.getWidth(), bounds.getHeight()) / 2.0f;
         auto toAngle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
-        auto lineW = jmin (8.0f, radius * 0.5f);
+        auto lineW = jmin (3.0f, radius * 0.1f);
         auto arcRadius = radius - lineW * 0.5f;
 
         // Dial background path
@@ -53,17 +53,37 @@ namespace juce
         Point<float> lineStartPoint (bounds.getCentreX() + lineStartRadius * std::cos (toAngle - MathConstants<float>::halfPi),
             bounds.getCentreY() + lineStartRadius * std::sin (toAngle - MathConstants<float>::halfPi));
         //Line
-        Point<float> thumbPoint (bounds.getCentreX() + (arcRadius + 4.0f) * std::cos (toAngle - MathConstants<float>::halfPi),
-            bounds.getCentreY() + (arcRadius + 4.0f) * std::sin (toAngle - MathConstants<float>::halfPi));
+        Point<float> thumbPoint (bounds.getCentreX() + (arcRadius + 2.0f) * std::cos (toAngle - MathConstants<float>::halfPi),
+            bounds.getCentreY() + (arcRadius + 2.0f) * std::sin (toAngle - MathConstants<float>::halfPi));
 
         g.setColour (slider.findColour (Slider::thumbColourId));
         //g.fillEllipse (Rectangle<float> (thumbWidth, thumbWidth).withCentre (thumbPoint));
         g.drawLine(lineStartPoint.getX(), lineStartPoint.getY(), thumbPoint.getX(), thumbPoint.getY(), lineW);
 
-        // Calculate square positions
-        juce::Rectangle<float> square(-lineW* 0.5f, -lineW* 0.5f, lineW, lineW);
+        // Draw the value text at the bottom right of the knob
+        String valueText = String(slider.getValue(), 2); // Display value with 2 decimal places
+        g.setFont(15.0f);
+        g.setColour(slider.findColour(Slider::textBoxTextColourId));
 
-        g.setColour(slider.findColour(juce::Slider::rotarySliderFillColourId));
+        // Calculate the size of the text to create a tight-fitting rectangle
+        float textWidth = g.getCurrentFont().getStringWidth(valueText);
+        float textHeight = g.getCurrentFont().getHeight();
 
+        // Position the rectangle at the bottom right of the knob bounds
+        Rectangle<float> textArea = Rectangle<float>(
+            bounds.getRight() - textWidth + 15,  // 10 pixels padding from the right edge
+            bounds.getBottom() - textHeight, // 5 pixels padding from the bottom edge
+            textWidth,
+            textHeight
+        );
+
+        g.drawText(valueText, textArea, Justification::centred, true);
+
+        // Draw title
+        String title = "Gain Control"; // Example title
+        g.setColour(slider.findColour(Slider::textBoxTextColourId));
+        g.setFont(15.0f);
+        float titleWidth = g.getCurrentFont().getStringWidth(title);
+        g.drawText(title, bounds.getX() - titleWidth + 10, bounds.getY(), titleWidth, 20, Justification::right);
     }
 }
