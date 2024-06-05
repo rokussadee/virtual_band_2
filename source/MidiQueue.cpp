@@ -56,9 +56,9 @@ void MidiQueue::push(const juce::MidiMessage& message) {
       {
           DBG ("Invalid MIDI message data, skipping push at start2.");
       }
-      fifo.finishedWrite (size1 + size2);
-      DBG("Finished writing to FIFO, size1 + size2 = " << (size1 + size2));
   }
+  fifo.finishedWrite (size1 + size2);
+  DBG("Finished writing to FIFO, size1 + size2 = " << (size1 + size2));
   msgV2S(messages);
 }
 
@@ -85,8 +85,9 @@ std::vector<juce::MidiMessage> MidiQueue::getMessages()
     DBG("prepareToRead: start1 = " << start1 << ", size1 = " << size1 << ", start2 = " << start2 << ", size2 = " << size2);
 
     for (int i = start1; i < start1 + size1; ++i) {
+        DBG("`messages[i].isSysEx()` == " << std::to_string(messages[i].isSysEx()));
         if (!messages[i].isSysEx()) {
-        DBG("Reading message at index " << i << ": " << messages[i].getDescription());
+        DBG("Reading message at index  " << i << ": " << messages[i].getDescription());
         result.push_back(messages[i]);
         }
     }
