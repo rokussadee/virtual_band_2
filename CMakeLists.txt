@@ -106,6 +106,8 @@ set(SourceFiles
         source/MidiListModel.h
         source/MidiTable.h
         source/MidiQueue.h
+        source/OscComponent.h
+        source/GlobalState.h
         source/LookAndFeel.h
 
         source/PluginEditor.cpp
@@ -114,6 +116,8 @@ set(SourceFiles
         source/MidiListModel.cpp
         source/MidiTable.cpp
         source/MidiQueue.cpp
+        source/OscComponent.cpp
+        source/GlobalState.cpp
         source/LookAndFeel.cpp
 )
 # file(GLOB_RECURSE SourceFiles CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/source/*.h")
@@ -161,7 +165,9 @@ target_link_libraries(SharedCode
     juce_gui_extra
     juce::juce_recommended_config_flags
     juce::juce_recommended_lto_flags
-    juce::juce_recommended_warning_flags)
+    juce::juce_recommended_warning_flags
+    juce::juce_osc
+)
 
 # Link the JUCE plugin targets our SharedCode target
 target_link_libraries("${PROJECT_NAME}" PRIVATE SharedCode)

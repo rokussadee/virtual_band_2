@@ -33,6 +33,17 @@ namespace juce
         void drawRotarySlider (Graphics &, int x, int y, int width, int height, float sliderPosProportional, float rotaryStartAngle, float rotaryEndAngle, Slider &);
     };
 
+    class CustomButton: public TextButton
+    {
+    public:
+        CustomButton()
+        {
+            auto buttonText = getButtonText();
+            setButtonText("Button");
+        }
+
+    };
+
     class CustomDial : public Slider
     {
     public:

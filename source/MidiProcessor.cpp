@@ -12,32 +12,58 @@ MidiProcessor::MidiProcessor() {}
 MidiProcessor::~MidiProcessor() {}
 
 void MidiProcessor::processMidi(juce::MidiBuffer& midiMessages) {
-// TODO: Setup "listening" state based on button click
-//          Approach: Implement a UI button that toggles the state of the application between listening and not listening.
+// ☑️ TODO: OSC connection: Setup OSC receiver component
+//          Approach:       Implement OSCReceiver class in JUCE application that receives any kind of message from Ableton OSC device
+//          Implementation: ☑️ Use example OSCReceiver class from tutorial and try to log "Song Tempo" values from Ableton OSC device using a given Port and OSC Address set up in the device
+//                          ☑️ Display "Song Tempo" information in GUI
+//                          ☑️ Store "Song Tempo" somewhere to use it in the MIDI sender component
+//          Resources:      OSCReceiver class (https://docs.juce.com/master/classOSCReceiver.html, https://docs.juce.com/master/classOSCReceiver_1_1Listener.html, https://docs.juce.com/master/classOSCReceiver_1_1ListenerWithOSCAddress.html)
+//                          OSCAddress class (https://docs.juce.com/master/classOSCAddress.html)
+//                          OSCAddressPattern class (https://docs.juce.com/master/classOSCAddressPattern.html)
+//                          OSCMessage class (https://docs.juce.com/master/classOSCMessage.html)
+//                          OSCTimeTag class (https://docs.juce.com/master/classOSCTimeTag.html)
+// TODO: OSC connection: Setup OSC Sender component
+//          Approach:       Implement OSCSender class in JUCE application that sends any kind of message to Ableton OSC device
+//          Implementation:
+//          Resources:      OSCSender class (https://docs.juce.com/master/classOSCSender.html)
+//                          OSCTimeTag class (https://docs.juce.com/master/classOSCTimeTag.html)
+// TODO: MIDI input: Build and test GPT agent to conclude on best MIDI formatting
+//          Approach:       Determine the optimal MIDI format for the GPT agent by conducting tests.
+//          Implementation: Create sample MIDI sequences in various formats and test them with the GPT agent.
+//                          Evaluate which format yields the best results.
+// TODO: MIDI input: Setup Openai-CPP package in JUCE application
+//          Approach:       Implement a separate component that forms the connection between JUCE app and OpenAI API
+//          Implementation: Build a class that runs on application init and immediately makes a connection to the GPT
+//                          Log app connection status
+//                          Display connection status on GUI (disable / enable)
+//          Resources:      openai-cpp package (https://github.com/olrea/openai-cpp)
+// TODO: MIDI input: Build & test basic openai Midi response call
+//          Approach:       Before implementing dynamic MIDI content I/O, build openai-cpp endpoint and make call via Postman with static example prompt
+//          Implementation: Build a component that takes care of openai-cpp calls given a formatted text prompt
+//                          Log output; then try streaming
+//                          Display output in GUI
+// TODO: OST Connection: setup "listening" state based on button click
+//          Approach:       Implement a UI button that toggles the state of the application between listening and not listening.
 //          Implementation: Use a boolean flag (e.g., isListening) that changes state based on the button click.
 //                          This flag will control whether incoming MIDI messages are processed or ignored.
 // TODO: pass BPM and # of bars to record
-//          Approach: Allow the user to input the desired BPM and the number of bars for recording.
+//          Approach:       Allow the user to input the desired BPM and the number of bars for recording.
 //          Implementation: Create UI elements (e.g., text fields or sliders) for the user to input BPM and bar count.
 //                          Store these values in variables (e.g., bpm, numBars).
 // TODO: count-in functionality
-//          Approach: Implement a count-in feature to give the user a few beats before recording starts.
+//          Approach:       Implement a count-in feature to give the user a few beats before recording starts.
 //          Implementation: Use a timer or a separate thread to handle the count-in.
 //                          Display visual feedback (e.g., flashing lights or a countdown) to indicate the count-in progress.
 // TODO: MIDI notes get recorded and added to the MidiListModel
-//          Approach: Record incoming MIDI notes while in the listening state and add them to the MidiListModel.
+//          Approach:       Record incoming MIDI notes while in the listening state and add them to the MidiListModel.
 //          Implementation: In the MIDI message handler, check the isListening flag.
 //                          If true, add the incoming messages to the MidiListModel
 // TODO: Pass timing info to Midi note information
-//          Approach: Include timing information (e.g., timestamp) with each MIDI note.
+//          Approach:       Include timing information (e.g., timestamp) with each MIDI note.
 //          Implementation: Modify the MidiMessage class to include timing information.
 //                          Capture the timestamp when each MIDI message is received and store it in the MidiMessage object.
-// TODO: Test GPT agent to conclude on best MIDI formatting
-//          Approach: Determine the optimal MIDI format for the GPT agent by conducting tests.
-//          Implementation: Create sample MIDI sequences in various formats and test them with the GPT agent.
-//                          Evaluate which format yields the best results.
 // TODO: IF necessary, reformat timing of Midi notes to a quantized "musical" value that clearly represents its position in the recorded measure.
-//          Approach: Quantize the MIDI notes to the nearest musical value (e.g., 1/4 note, 1/8 note) if required for better representation.
+//          Approach:       Quantize the MIDI notes to the nearest musical value (e.g., 1/4 note, 1/8 note) if required for better representation.
 //          Implementation: Implement a quantization function that adjusts the timestamps of the notes to the nearest musical value.
 //                          This may involve calculating the nearest beat based on the BPM.
 //          opt1) Reformat "note on"/"note off" values to a single note value with a length.

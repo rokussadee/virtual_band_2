@@ -1,6 +1,7 @@
 #include <juce_gui_basics/juce_gui_basics.h> // For GUI components
 #include <juce_core/juce_core.h> // For utility functions and macros
 #include "PluginEditor.h"
+#include "GlobalState.h"
 
 PluginEditor::PluginEditor (PluginProcessor& p)
     : AudioProcessorEditor (&p),
@@ -47,6 +48,11 @@ void PluginEditor::paint (juce::Graphics& g)
     g.setFont (16.0f);
     auto helloWorld = juce::String ("Hello from ") + PRODUCT_NAME_WITHOUT_VERSION + " v" VERSION + " running in " + CMAKE_BUILD_TYPE;
     g.drawText (helloWorld, area.removeFromTop (150), juce::Justification::centred, false);
+
+    // Get the song tempo from the global state
+    float songTempo = GlobalState::getInstance().getSongTempo();
+    g.drawText ("Song Tempo: " + juce::String(songTempo), getLocalBounds(), juce::Justification::centred, true);
+
 }
 
 void PluginEditor::resized()

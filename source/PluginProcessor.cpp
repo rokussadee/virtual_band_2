@@ -15,10 +15,18 @@ PluginProcessor::PluginProcessor()
                      #endif
                        )
 {
+    if(!oscComponent.connect(oscPort))
+        DBG("Error: could not connect to OSC Port " << oscPort);
+
+    if (!oscComponent1.connect(midiOscPort))
+        DBG("Error: could not connect to MIDI OSC Port " << midiOscPort);
+    oscComponent1.addListener("/");
+    oscComponent.addListener("/live/bpm");
 }
 
 PluginProcessor::~PluginProcessor()
 {
+    oscComponent.disconnect();
 }
 
 //==============================================================================
