@@ -18,10 +18,13 @@ PluginProcessor::PluginProcessor()
     if(!oscComponent.connect(oscPort))
         DBG("Error: could not connect to OSC Port " << oscPort);
 
-    if (!oscComponent1.connect(midiOscPort))
-        DBG("Error: could not connect to MIDI OSC Port " << midiOscPort);
-    oscComponent1.addListener("/");
+//    if (!oscComponent1.connect(midiOscPort))
+//        DBG("Error: could not connect to MIDI OSC Port " << midiOscPort);
+    oscComponent.addListener("/");
     oscComponent.addListener("/live/bpm");
+    oscComponent.addListener("/live/record");
+    oscComponent.addListener("/ableton/playing");
+    oscComponent.addListener("/ableton/recording");
 }
 
 PluginProcessor::~PluginProcessor()

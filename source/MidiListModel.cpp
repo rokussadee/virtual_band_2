@@ -5,7 +5,7 @@
 #include <juce_core/juce_core.h> // For juce::jmin and juce::jmax
 #include "MidiListModel.h"
 
-MidiListModel::MidiListModel() = default;
+MidiListModel::MidiListModel() : agent() {}
 
 MidiListModel::~MidiListModel() = default;
 
@@ -38,6 +38,10 @@ size_t MidiListModel::size() const {
 
 const juce::MidiMessage& MidiListModel::operator[](size_t ind) const {
   return messages[ind];
+}
+
+std::string MidiListModel::generateResponse(const std::string& prompt) {
+    return agent.getCompletion(prompt);
 }
 
 

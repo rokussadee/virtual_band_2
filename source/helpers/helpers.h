@@ -20,7 +20,7 @@ namespace Helpers
                 if(it->isNoteOnOrOff())
                 {
                     vts << it->getDescription();
-                    DBG (it->getDescription());
+//                    DBG (it->getDescription());
                     if (std::next (it) != messageVector.end())
                     {
                         vts << ", ";

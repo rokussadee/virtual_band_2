@@ -1,0 +1,35 @@
+MIDILogger initialized. File opened successfully.
+name: 
+	1-Lovely Keys
+can be armed: 
+	True
+arm: 
+	True
+clip slots: 
+	<Base.Vector object at 0x16aad14d0>
+data: 
+	<bound method Track.get_data of <Track.Track object at 0x16aa7e9e0>>
+has midi input: 
+	True
+has midi output: 
+	False
+record mode: 
+	False
+name: 
+	2-MIDI
+can be armed: 
+	True
+arm: 
+	True
+clip slots: 
+	<Base.Vector object at 0x16aad14d0>
+data: 
+	<bound method Track.get_data of <Track.Track object at 0x16aa7eaf0>>
+has midi input: 
+	True
+has midi output: 
+	True
+record mode: 
+	False
+MIDI note listeners added successfully
+MIDILogger disconnecting.

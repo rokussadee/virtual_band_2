@@ -28,5 +28,7 @@ private:
     juce::MidiKeyboardComponent keyboardComponent;
     std::unique_ptr<melatonin::Inspector> inspector;
     juce::TextButton inspectButton { "Inspect the UI" };
+    juce::TextButton generateButton {"Generate response"};
+    juce::String response;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
 };

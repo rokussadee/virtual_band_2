@@ -24,7 +24,7 @@ void MidiProcessor::processMidi(juce::MidiBuffer& midiMessages) {
 //                          OSCTimeTag class (https://docs.juce.com/master/classOSCTimeTag.html)
 // TODO: OSC connection: Setup OSC Sender component
 //          Approach:       Implement OSCSender class in JUCE application that sends any kind of message to Ableton OSC device
-//          Implementation:
+//          Implementation: Use example OSCSender class from tutorial and try to
 //          Resources:      OSCSender class (https://docs.juce.com/master/classOSCSender.html)
 //                          OSCTimeTag class (https://docs.juce.com/master/classOSCTimeTag.html)
 // TODO: MIDI input: Build and test GPT agent to conclude on best MIDI formatting
@@ -89,37 +89,37 @@ void MidiProcessor::processMidi(juce::MidiBuffer& midiMessages) {
 
   for (const juce::MidiMessageMetadata metadata : midiMessages) {
       // Check if the message is a SysEx message and skip it if it is
-    DBG("Processing MIDI Metadata");
-    DBG("Metadata: TimeStamp = " << metadata.samplePosition
-                                    << ", Message = " << metadata.getMessage().getDescription());
+//    DBG("Processing MIDI Metadata");
+//    DBG("Metadata: TimeStamp = " << metadata.samplePosition
+//                                    << ", Message = " << metadata.getMessage().getDescription());
 
     const juce::MidiMessage message = metadata.getMessage();
 
     const juce::String description = message.getDescription();
 
-    DBG("MIDI Message Description: " << description);
-    DBG("MIDI Message Raw Data Pointer: " << juce::String::toHexString((juce::int64)(message.getRawData())));
-    DBG("MIDI Message Raw Data Size: " << message.getRawDataSize());
+//    DBG("MIDI Message Description: " << description);
+//    DBG("MIDI Message Raw Data Pointer: " << juce::String::toHexString((juce::int64)(message.getRawData())));
+//    DBG("MIDI Message Raw Data Size: " << message.getRawDataSize());
 
-    DBG(description);
+//    DBG(description);
 
     if (message.getRawData() != nullptr && message.getRawDataSize() > 0 && message.isNoteOnOrOff())
     {
         midiQueue.push (message);
-        DBG ("message pushed to queue successfully");
+//        DBG ("message pushed to queue successfully");
         sequence.addEvent(message, metadata.samplePosition);
-        DBG("message added to the sequence successfully");
+//        DBG("message added to the sequence successfully");
     } else if (message.getRawDataSize() == 0) {
-        DBG("MIDI message has zero size, not pushed to queue. Raw Data Pointer: "
-             << juce::String::toHexString((juce::int64)(message.getRawData()))
-             << ", Size: " << message.getRawDataSize());
+//        DBG("MIDI message has zero size, not pushed to queue. Raw Data Pointer: "
+//             << juce::String::toHexString((juce::int64)(message.getRawData()))
+//             << ", Size: " << message.getRawDataSize());
     } else {
-        DBG("Invalid MIDI message, not pushed to queue. Raw Data Pointer: "
-        <<  juce::String::toHexString((juce::int64)(message.getRawData()))
-        << ", Size: " << message.getRawDataSize());
+//        DBG("Invalid MIDI message, not pushed to queue. Raw Data Pointer: "
+//        <<  juce::String::toHexString((juce::int64)(message.getRawData()))
+//        << ", Size: " << message.getRawDataSize());
     }
 
-    DBG("MidiQueue contents: " << midiQueue.getQueueContents());
+//    DBG("MidiQueue contents: " << midiQueue.getQueueContents());
 
     std::vector<juce::MidiMessage> messageVector = midiQueue.getMessages();
     std::ostringstream vts;
@@ -127,10 +127,10 @@ void MidiProcessor::processMidi(juce::MidiBuffer& midiMessages) {
     if (!messageVector.empty()) {
         msgV2S(messageVector);
     } else {
-        DBG("messageVector is empty");
+//        DBG("messageVector is empty");
     }
 
-    std::cout << "MidiQueue getMessages started: \n" << vts.str() << "\nMidiQueue getMessages ended\n" << std::endl; // For debugging purposes
+//    std::cout << "MidiQueue getMessages started: \n" << vts.str() << "\nMidiQueue getMessages ended\n" << std::endl; // For debugging purposes
   }
 
   if(!sequence.getNumEvents() == 0)
@@ -138,7 +138,8 @@ void MidiProcessor::processMidi(juce::MidiBuffer& midiMessages) {
       std::vector<juce::MidiMessage> messages;
       midiQueue.pop (std::back_inserter (messages));
       midiListModel.addMessages (sequence);
-      DBG("MidiMessageSequence: " << toString(sequence));
+
+//      DBG("MidiMessageSequence: " << toString(sequence));
   }
 }
 

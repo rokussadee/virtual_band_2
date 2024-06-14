@@ -11,15 +11,15 @@ MidiQueue::MidiQueue() : messages(queueSize) {
 MidiQueue::~MidiQueue() {}
 
 void MidiQueue::push(const juce::MidiMessage& message) {
-    DBG("Preparing to push MIDI Message:");
-    DBG("Message Timestamp: " << message.getTimeStamp());
-    DBG("Message Size: " << message.getRawDataSize());
-    DBG("Message Data Pointer: " << juce::String::toHexString((juce::int64)(message.getRawData())));
+//    DBG("Preparing to push MIDI Message:");
+//    DBG("Message Timestamp: " << message.getTimeStamp());
+//    DBG("Message Size: " << message.getRawDataSize());
+//    DBG("Message Data Pointer: " << juce::String::toHexString((juce::int64)(message.getRawData())));
 
   int size1, start1, size2, start2;
   fifo.prepareToWrite(1, start1, size1, start2, size2);
-  DBG("Prepared to write: size1 = " << size1 << ", start1 = " << start1
-                                     << ", size2 = " << size2 << ", start2 = " << start2);
+//  DBG("Prepared to write: size1 = " << size1 << ", start1 = " << start1
+//                                     << ", size2 = " << size2 << ", start2 = " << start2);
 
   // Safety check before writing
   if (start1 >= messages.size() || start1 < 0) {
@@ -37,7 +37,7 @@ void MidiQueue::push(const juce::MidiMessage& message) {
   {
       if (message.getRawData() != nullptr && message.getRawDataSize() > 0) {
           messages[start1] = message;
-          DBG("Message assigned at start1");
+//          DBG("Message assigned at start1");
       } else if (message.getRawDataSize() == 0) {
           DBG("Skipping push: MIDI message size is zero at start1.");
       }  else {
@@ -49,7 +49,7 @@ void MidiQueue::push(const juce::MidiMessage& message) {
       if (message.getRawData() != nullptr && message.getRawDataSize() > 0)
       {
           messages[start2] = message;
-          DBG ("Message assigned at start2");
+//          DBG ("Message assigned at start2");
       } else if (message.getRawDataSize() == 0) {
           DBG("Skipping push: MIDI message size is zero at start2.");
       } else
@@ -58,7 +58,7 @@ void MidiQueue::push(const juce::MidiMessage& message) {
       }
   }
   fifo.finishedWrite (size1 + size2);
-  DBG("Finished writing to FIFO, size1 + size2 = " << (size1 + size2));
+//  DBG("Finished writing to FIFO, size1 + size2 = " << (size1 + size2));
   msgV2S(messages);
 }
 
@@ -82,26 +82,26 @@ std::vector<juce::MidiMessage> MidiQueue::getMessages()
     std::vector<juce::MidiMessage> result;
     int size1, start1, size2, start2;
     fifo.prepareToRead(fifo.getNumReady(), start1, size1, start2, size2);
-    DBG("prepareToRead: start1 = " << start1 << ", size1 = " << size1 << ", start2 = " << start2 << ", size2 = " << size2);
+//    DBG("prepareToRead: start1 = " << start1 << ", size1 = " << size1 << ", start2 = " << start2 << ", size2 = " << size2);
 
     for (int i = start1; i < start1 + size1; ++i) {
-        DBG("`messages[i].isSysEx()` == " << std::to_string(messages[i].isSysEx()));
+//        DBG("`messages[i].isSysEx()` == " << std::to_string(messages[i].isSysEx()));
         if (!messages[i].isSysEx()) {
-        DBG("Reading message at index  " << i << ": " << messages[i].getDescription());
+//        DBG("Reading message at index  " << i << ": " << messages[i].getDescription());
         result.push_back(messages[i]);
         }
     }
 
     for (int i = start2; i < start2 + size2; ++i) {
         if (!messages[i].isSysEx()) {
-        DBG("Reading message at index " << i << ": " << messages[i].getDescription());
+//        DBG("Reading message at index " << i << ": " << messages[i].getDescription());
         result.push_back(messages[i]);
         }
     }
 
     fifo.finishedRead(size1 + size2);
     msgV2S(result);
-    DBG("Finished reading, total messages read: " << result.size());
+//    DBG("Finished reading, total messages read: " << result.size());
     return result;
 //    while (!messages.empty())
 //    {
@@ -129,5 +129,5 @@ void MidiQueue::msgV2S(std::vector<juce::MidiMessage> messageVector)
 {
     std::ostringstream stream = helpers.msgV2S(messageVector);
 
-    std::cout << "Midi Messages in MidiQueue: " << stream.str() << std::endl;
+//    std::cout << "Midi Messages in MidiQueue: " << stream.str() << std::endl;
 }

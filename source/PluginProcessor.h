@@ -46,6 +46,6 @@ private:
     int midiOscPort = 2346;
     MidiProcessor midiProcessor;
     OscComponent oscComponent;
-    OscComponent oscComponent1;
+    //OscComponent oscComponent1;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };

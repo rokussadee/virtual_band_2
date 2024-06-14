@@ -15,6 +15,7 @@ include(PamplejuceMacOS)
 # Worry not, JUCE's PRODUCT_NAME can have spaces (and is what DAWs display)
 set(PROJECT_NAME "VirtualBand2")
 
+
 # Worry not, JUCE's PRODUCT_NAME can have spaces (and is what DAWs will display)
 # You can also just have it be the same thing as PROJECT_NAME
 # You may want to append the major version on the end of this (and PROJECT_NAME) ala:
@@ -51,6 +52,15 @@ add_subdirectory(JUCE)
 # This adds the melatonin inspector module
 add_subdirectory (modules/melatonin_inspector)
 
+# Find CURL library
+find_package(CURL REQUIRED)
+if (CURL_FOUND)
+    message(STATUS "Found CURL: ${CURL_VERSION_STRING}")
+    include_directories(${CURL_INCLUDE_DIRS})
+else()
+    message(FATAL_ERROR "CURL not found")
+endif()
+
 # See `docs/CMake API.md` in the JUCE repo for all config options
 juce_add_plugin("${PROJECT_NAME}"
     # Icons for the standalone app
@@ -85,6 +95,7 @@ juce_add_plugin("${PROJECT_NAME}"
     NEEDS_MIDI_INPUT TRUE
     NEEDS_MIDI_OUTPUT TRUE
 
+    NEEDS_CURL TRUE
 )
 
 # This lets us use our code in both the JUCE targets and our Test target
@@ -108,7 +119,11 @@ set(SourceFiles
         source/MidiQueue.h
         source/OscComponent.h
         source/GlobalState.h
+        source/agent/GptAgent.h
         source/LookAndFeel.h
+
+        source/openai-cpp/openai.hpp
+        source/openai-cpp/nlohmann/json.hpp
 
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
@@ -118,6 +133,7 @@ set(SourceFiles
         source/MidiQueue.cpp
         source/OscComponent.cpp
         source/GlobalState.cpp
+        source/agent/GptAgent.cpp
         source/LookAndFeel.cpp
 )
 # file(GLOB_RECURSE SourceFiles CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/source/*.h")
@@ -135,7 +151,7 @@ target_compile_definitions(SharedCode
 
     # JUCE_WEB_BROWSER and JUCE_USE_CURL off by default
     JUCE_WEB_BROWSER=0  # If you set this to 1, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
-    JUCE_USE_CURL=0     # If you set this to 1, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
+    JUCE_USE_CURL=1     # If you set this to 1, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
     JUCE_VST3_CAN_REPLACE_VST2=0
 
     # Uncomment if you are paying for a an Indie/Pro license or releasing under GPLv3
@@ -167,6 +183,7 @@ target_link_libraries(SharedCode
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags
     juce::juce_osc
+    ${CURL_LIBRARIES}  # Link libcurl
 )
 
 # Link the JUCE plugin targets our SharedCode target

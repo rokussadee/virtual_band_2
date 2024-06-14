@@ -71,7 +71,59 @@ void OscComponent::oscMessageReceived(const juce::OSCMessage &message)
             DBG("Message size or type mismatch.");
         }
     }
-    else if (message.getAddressPattern() == juce::OSCAddressPattern("/"))
+    if (message.getAddressPattern() == juce::OSCAddressPattern("/ableton/playing"))
+    {
+        DBG("Live is playing");
+        for (int i = 0; i < message.size(); ++i)
+        {
+            if (message[i].isInt32())
+            {
+                DBG("Argument " << i << " is an int32: " << message[i].getInt32());
+                bool isPlaying = message[i].getInt32() != 0;
+                // Handle playing state
+            }
+            else if (message[i].isFloat32())
+            {
+                DBG("Argument " << i << " is a float32: " << message[i].getFloat32());
+            }
+            else if (message[i].isString())
+            {
+                DBG("Argument " << i << " is a string: " << message[i].getString());
+            }
+            else
+            {
+                DBG("Argument " << i << " is of unknown type.");
+            }
+        }
+        DBG("Address pattern matched: /ableton/playing");
+    }
+    if (message.getAddressPattern() == juce::OSCAddressPattern("/ableton/recording"))
+    {
+        DBG("Live is recording");
+        for (int i = 0; i < message.size(); ++i)
+        {
+            if (message[i].isInt32())
+            {
+                DBG("Argument " << i << " is an int32: " << message[i].getInt32());
+                bool isRecording = message[i].getInt32() != 0;
+                // Handle recording state
+            }
+            else if (message[i].isFloat32())
+            {
+                DBG("Argument " << i << " is a float32: " << message[i].getFloat32());
+            }
+            else if (message[i].isString())
+            {
+                DBG("Argument " << i << " is a string: " << message[i].getString());
+            }
+            else
+            {
+                DBG("Argument " << i << " is of unknown type.");
+            }
+        }
+        DBG("Address pattern matched: /ableton/recording");
+    }
+    if (message.getAddressPattern() == juce::OSCAddressPattern("/live/record"))
     {
         for (int i = 0; i < message.size(); ++i)
         {

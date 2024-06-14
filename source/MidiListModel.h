@@ -10,6 +10,7 @@
 #include <juce_audio_basics/juce_audio_basics.h> // For juce::MidiMessage and juce::MidiMessageSequence
 #include <vector>
 #include "helpers/helpers.h"
+#include "agent/GptAgent.h"
 
 class MidiListModel {
 public:
@@ -27,11 +28,13 @@ public:
 
   void msgV2S(std::vector<juce::MidiMessage> messageVector);
 
+  std::string generateResponse(const std::string& prompt);
 
 private:
   static constexpr auto numToStore = 1000;
   std::vector<juce::MidiMessage> messages;
   Helpers::helpers helpers;
+  GptAgent agent;
 };
 
 #endif  // VIRTUAL_BAND_MIDILISTMODEL_H

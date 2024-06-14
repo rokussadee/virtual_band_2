@@ -16,6 +16,7 @@ PluginEditor::PluginEditor (PluginProcessor& p)
 
     addAndMakeVisible(keyboardComponent);
     addAndMakeVisible (inspectButton);
+    addAndMakeVisible(generateButton);
 
     // this chunk of code instantiates and opens the melatonin inspector
     inspectButton.onClick = [&] {
@@ -26,6 +27,10 @@ PluginEditor::PluginEditor (PluginProcessor& p)
         }
 
         inspector->setVisible (true);
+    };
+
+    generateButton.onClick = [&] {
+        response = GptAgent::getCompletion("Say Hi!");
     };
 
     // Make sure that before the constructor has finished, you've set the
@@ -45,14 +50,15 @@ void PluginEditor::paint (juce::Graphics& g)
 
     auto area = getLocalBounds();
     g.setColour (juce::Colours::white);
-    g.setFont (16.0f);
+    g.setFont (11.0f);
     auto helloWorld = juce::String ("Hello from ") + PRODUCT_NAME_WITHOUT_VERSION + " v" VERSION + " running in " + CMAKE_BUILD_TYPE;
-    g.drawText (helloWorld, area.removeFromTop (150), juce::Justification::centred, false);
+    g.drawText (helloWorld, area.removeFromTop (50), juce::Justification::centred, false);
 
     // Get the song tempo from the global state
     float songTempo = GlobalState::getInstance().getSongTempo();
     g.drawText ("Song Tempo: " + juce::String(songTempo), getLocalBounds(), juce::Justification::centred, true);
 
+    g.drawText(response, getLocalBounds(), juce::Justification::centred, true);
 }
 
 void PluginEditor::resized()
@@ -61,6 +67,7 @@ void PluginEditor::resized()
 
     auto area = getLocalBounds();
     area.removeFromBottom(50);
-    inspectButton.setBounds (getLocalBounds().withSizeKeepingCentre(100, 50));
+    inspectButton.setBounds (getLocalBounds().removeFromBottom(20));
+    generateButton.setBounds(getLocalBounds().removeFromBottom(50));
     customDial.setBounds(getWidth()/2 - 100, getHeight()/2 - 100, 120, 70);
 }
