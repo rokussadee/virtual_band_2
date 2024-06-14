@@ -1,7 +1,7 @@
 # Virtual Band 2
 
 ## Concept
-Virtual Band 2 is an innovative application designed to integrate symbolic music generation using AI with Digital Audio Workstations (DAWs). The project aims to provide real-time music generation capabilities using OpenAI's GPT models, allowing musicians to create and manipulate musical compositions interactively.
+Virtual Band 2 is an application designed to integrate symbolic music generation using AI with Digital Audio Workstations (DAWs). The project aims to provide real-time music generation capabilities using OpenAI's GPT models, allowing musicians to create and manipulate musical compositions interactively.
 
 ## Goals
 1. **Integrate AI for Music Generation**: Utilize OpenAI's GPT models to generate symbolic music information in real-time.
